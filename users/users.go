@@ -1,6 +1,7 @@
 package users
 
 import (
+	"goUsers/database"
 	"goUsers/helper"
 	"time"
 
@@ -13,27 +14,11 @@ type UsersStruct struct {
 	Name string        `bson:"name" json:"name"`
 }
 
-func session() *mgo.Session {
-
-	//TODO: Add .ENV for this
-	//TODO: Is this best practice here?
-	session, err := mgo.Dial("mongodb://localhost:27017")
-	if err != nil {
-		panic(err)
-	}
-
-	session.SetMode(mgo.Monotonic, true)
-
-	return session.Clone()
-
-}
-
-//TODO: Im getting 1ms response times on this from my local, is this good?
 func All() []UsersStruct {
 
 	defer helper.TimeTrack(time.Now(), "All")
 
-	session := session()
+	session := database.Session()
 	defer session.Close()
 
 	users := session.DB("usersDB").C("users")

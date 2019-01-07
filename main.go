@@ -1,18 +1,30 @@
 package main
 
 import (
-	"goUsers/users" //TODO: Seems like people use github URLs here. But this is not on github yet so is this import path ok?
+	"goUsers/users"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo"
+
+	"github.com/joho/godotenv"
 )
 
 type format struct {
 	Users []users.UsersStruct `json:"users"`
 }
 
-//TODO: Is the structure of the app ok?
+func env() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
+
+	env()
 
 	e := echo.New()
 
@@ -24,7 +36,6 @@ func main() {
 		return c.JSON(http.StatusOK, format{users.All()})
 	})
 
-	//TODO: Add to .ENV
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("API_PORT")))
 
 }

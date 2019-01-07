@@ -7,4 +7,5 @@ HOST="localhost" gin --appPort=1323 run main.go
 ### TODO
 ````text
 * Look into testing
+* What to use to seed db?
 ````
